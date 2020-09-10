@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <titte>test</titte>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js "></script>
+    </head>
+    <body>
+        <canvas id="myChart" width="800" height=300"></canvas>
+        <script>
+            const xaxis=[];
+            const yaxis=[];
+            chartit();
+            async function chartit(){
+                await getData();
+            var ctx = document.getElementById('myChart').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: xaxis,
+                            datasets: [{
+                                label: 'Temprature is',
+                                data: yaxis,
+                                backgroundColor: [
+                                    'red'
+                                ],
+                                lineTension:0,
+                                fill:false,
+                                borderColor: [
+                                    'black'
+                                ],
+                                borderWidth: 1
+                            }]
+                        }
+                        });
+            }
+            
+            async function getData(){
+                const repsonse = await fetch('ZonAnn.Ts+dSST.csv');
+                const data = await repsonse.text();
+                const rows=data.split('\n').slice(1);
+                rows.forEach(elemnet => {
+                    const row = elemnet.split(',');
+                    const year = row[0];
+                    xaxis.push(year)
+                    const temp = row[1]
+                    yaxis.push(parseFloat(temp)+14)
+                })
+            }
+        </script>
+    </body>
+</html>
